@@ -1,22 +1,40 @@
 
+import { Suspense, useState } from 'react'
 import './App.css'
+import Navbar from './Component/Navbar/Navbar'
+import AvailablePlayer from './Component/AvailablePlayer/AvailablePlayer'
+import SelectedPlayer from './Component/SelectedPlayer/SelectedPlayer'
+
 
 function App() {
+  
+
+ const fetchPlayers = fetch('./players.json').then(res=>res.json())
+ const[toggle,setToggle] =useState(true)
+ const[availableBalance,setAvailableBalance]=useState(560000799)
+
+  
+  
+
+
+
 
 
   return (
     <>
-     
-     <div class="navbar bg-base-100 shadow-sm">
-  <div class="flex-1">
-    <a class="btn btn-ghost text-xl">daisyUI</a>
+  <Navbar availableBalance={availableBalance}></Navbar>
+  <div className=' max-w-[1200px] mx-auto flex justify-between items-center'>
+    <h1 className='font-bold text-2xl'>Available</h1>
+    <div>
+      <button onClick={()=>setToggle(true)} className={`py-3 px-4 ${toggle ? "bg-[#E7FE29]" : ""} border-r-0 rounded-l-2xl`}
+          >AVailable</button>
+      <button onClick={()=>setToggle(false)} className={`py-3 px-4 ${!toggle ? "bg-[#E7FE29]" : ""} border-l-0 rounded-r-2xl`}>Select<span>(0)</span></button>
+    </div>
   </div>
-  <div class="flex-none">
-    <button class="btn btn-square btn-ghost">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block h-5 w-5 stroke-current"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"></path> </svg>
-    </button>
-  </div>
-</div>
+  {toggle===true?  <Suspense fallback={<span class="loading loading-infinity loading-lg"></span>}>
+  <AvailablePlayer availableBalance={availableBalance} setAvailableBalance={setAvailableBalance}  fetchPlayers={fetchPlayers}></AvailablePlayer>
+  </Suspense>:<SelectedPlayer></SelectedPlayer>}
+
     
     </>
   )
