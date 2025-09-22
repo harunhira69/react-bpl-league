@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import userImg from '../../assets/user.png';
 import flagImg from '../../assets/report.png';
+import { toast } from 'react-toastify';
 
-const PlayerCart = ({player,availableBalance,setAvailableBalance}) => {
+const PlayerCart = ({player,availableBalance,setAvailableBalance,purchasePlayers,setPurchasePlayers}) => {
     const [isSelected,setIsSelected]= useState(false)
    
     const handleSelect=(playerData)=>{
@@ -13,11 +14,16 @@ const PlayerCart = ({player,availableBalance,setAvailableBalance}) => {
       ? parseFloat(playerData.price.replace("$", ""))
       : playerData.price;
          if(availableBalance<price){
-            alert("You don't have enough coins")
+            toast("You don't have enough coins")
                return
+        }
+        if(purchasePlayers.length>=6){
+            toast("You can selcet maximum 6 player")
+            return 
         }
           setIsSelected(true) 
           setAvailableBalance((prev)=>prev-price)
+          setPurchasePlayers([...purchasePlayers,playerData])
 
     }
     return (
